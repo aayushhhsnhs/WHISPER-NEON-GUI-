@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subtitles Generator</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- GPU DEVICE FROM FLASK -->
+    <script>
+        window.APP_DEVICE = "{{ device }}";
+    </script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="brand">
+        <div class="brand-title">Subtitles Generator</div>
+        <div class="brand-sub">product from rcubedigitalservices</div>
+    </div>
+
+    <div class="nav-right">
+        <span class="nav-link" id="workspaceLink">Workspace</span>
+        <span class="nav-link">Docs</span>
+        <span class="nav-link">GitHub</span>
+    </div>
+</nav>
+
+<div class="container">
+
+    <main class="workspace-card">
+
+        <!-- UPLOAD -->
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <input type="file" id="fileInput" accept="video/*,audio/*" hidden>
+                <div class="upload-content">
+                    <div class="upload-icon">⬆</div>
+                    <h3>Upload Audio / Video</h3>
+                    <p>Drag & drop or click</p>
+                    <p class="file-types">MP4, MOV, WAV, MP3, M4A, FLAC</p>
+                </div>
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display:none;">
+                <div class="file-details">
+                    <span class="file-name" id="fileName"></span>
+                    <span class="file-size" id="fileSize"></span>
+                </div>
+                <button class="remove-file" id="removeFile">×</button>
+            </div>
+        </div>
+
+        <!-- WAVEFORM -->
+        <div class="waveform-card" id="waveformCard" style="display:none;">
+            <div class="waveform-header">Audio Preview</div>
+            <div class="waveform-bar" id="waveformBar"></div>
+            <div class="waveform-controls">
+                <span id="waveTime">00:00</span>
+                <span id="waveDuration">00:00</span>
+            </div>
+        </div>
+
+        <!-- SETTINGS + GPU -->
+        <div class="settings-row">
+
+            <div class="options-section">
+                <div class="option-group">
+                    <label>Model</label>
+                    <select id="modelSelect" class="modern-select">
+                        {% for model in models %}
+                        <option value="{{ model }}" {% if model == 'medium' %}selected{% endif %}>
+                            {{ model|capitalize }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label>Task</label>
+                    <select id="taskSelect" class="modern-select">
+                        <option value="transcribe">Transcribe</option>
+                        <option value="translate" selected>Translate</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label>Language</label>
+                    <select id="languageSelect" class="modern-select">
+                        <option value="">Auto</option>
+                        {% for name, code in languages.items() %}
+                        <option value="{{ code }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- GPU -->
+            <div class="gpu-card">
+                <div class="gpu-title">System</div>
+                <div class="gpu-status">
+                    <span class="gpu-dot"></span>
+                    <span id="gpuText">Detecting…</span>
+                </div>
+                <div class="gpu-speed" id="gpuSpeed">—</div>
+            </div>
+
+        </div>
+
+        <!-- RUN -->
+        <div class="action-section">
+            <button class="process-btn" id="processBtn" disabled>
+                <span class="btn-text">Start Transcription</span>
+                <span class="spinner" style="display:none;">⏳</span>
+            </button>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-section" id="progressSection" style="display:none;">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p class="progress-status" id="progressStatus">Processing…</p>
+        </div>
+
+        <!-- RESULT -->
+        <div class="result-section" id="resultSection" style="display:none;">
+            <div class="result-card">
+                <div class="result-content">
+                    <h3>Subtitles Ready</h3>
+                    <p>Download generated file</p>
+                </div>
+                <a href="#" class="download-btn" id="downloadBtn" download>
+                    Download
+                </a>
+            </div>
+        </div>
+
+        <div class="powered">Powered by rcubedigitalservices</div>
+
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<div id="comingSoonToast" class="toast">Workspace coming soon</div>
+</body>
+</html>
